@@ -1,71 +1,111 @@
-import React, { useState } from 'react'
-import logo from "../images/logo.png"
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import image from "../images/authPageSide.png";
 import { api_base_url } from '../helper';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-
   const [error, setError] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const notifySuccess = () => toast.success('Login successful!', {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
 
   const submitForm = (e) => {
     e.preventDefault();
-    fetch(api_base_url + "/login",{
+    fetch(api_base_url + "/login", {
       mode: "cors",
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        email: email,
-        password: pwd
-      })
+      body: JSON.stringify({ email, password: pwd })
     }).then(res => res.json()).then(data => {
-      if(data.success === true){
+      if (data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("userId", data.userId);
-        setTimeout(() => {
-          window.location.href = "/"
-        }, 200);
+        notifySuccess();
+        setTimeout(() => { window.location.href = "/"; }, 2000);
       } else {
         setError(data.message);
       }
-    })
-  }
+    });
+  };
 
   return (
-    <>
-      <div className="container w-screen min-h-screen flex items-center justify-between pl-[100px]">
-        <div className="left w-[35%]">
-          <img className='w-[200px]' src={logo} alt="" />
-          <form onSubmit={submitForm} className='w-full mt-[60px]' action="">
-
-            <div className="inputBox">
-              <input required onChange={(e)=>{setEmail(e.target.value)}} value={email} type="email" placeholder='Email'/>
+    <div className="w-screen min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-6">
+      <ToastContainer />
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 0.6 }} 
+        className="w-full max-w-4xl flex items-center bg-black/40 backdrop-blur-lg shadow-xl rounded-2xl overflow-hidden"
+      >
+        {/* Left Side - Login Form */}
+        <div className="w-1/2 p-8">
+          <h1 className='text-3xl font-bold text-blue-400 mb-8 text-center'>NexGen Studios</h1>
+          <form onSubmit={submitForm} className='space-y-6'>
+            <div className="relative">
+              <input 
+                required 
+                onChange={(e) => setEmail(e.target.value)} 
+                value={email} 
+                type="email" 
+                placeholder='Email' 
+                className="w-full px-4 py-3 bg-gray-800/80 rounded-lg border border-gray-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-500 outline-none text-white placeholder-gray-400"
+              />
             </div>
-
-            <div className="inputBox">
-              <input required onChange={(e)=>{setPwd(e.target.value)}} value={pwd} type="password" placeholder='Password'/>
+            <div className="relative">
+              <input 
+                required 
+                onChange={(e) => setPwd(e.target.value)} 
+                value={pwd} 
+                type={showPassword ? "text" : "password"} 
+                placeholder='Password' 
+                className="w-full px-4 py-3 bg-gray-800/80 rounded-lg border border-gray-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-500 outline-none text-white placeholder-gray-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              >
+                {showPassword ? "👁️" : "🔒"}
+              </button>
             </div>
-
-            <p className='text-[gray]'>Don't have an account <Link to="/signUp" className='text-[#00AEEF]'>Sign Up</Link></p>
-            
-            <p className='text-red-500 text-[14px] my-2'>{error}</p>
-
-            <button className="btnBlue w-full mt-[20px]">Login</button>
+            <p className='text-sm text-gray-300'>
+              Don't have an account?{' '}
+              <Link to="/signUp" className='text-blue-400 hover:text-blue-300'>Sign Up</Link>
+            </p>
+            {error && <p className='text-red-500 text-sm bg-red-700/20 p-2 rounded-lg'>{error}</p>}
+            <motion.button 
+              whileHover={{ scale: 1.05 }} 
+              whileTap={{ scale: 0.95 }}
+              className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-all"
+            >
+              Login
+            </motion.button>
           </form>
         </div>
-        <div className="right w-[55%]">
-          <img className='h-[100vh] w-[100%] object-cover' src={image} alt="" />
+        {/* Right Side - Image */}
+        <div className="w-1/2 relative">
+          <img className='h-full w-full object-cover' src="/code-ide.jpg" alt="Coding" />
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
-      </div>
-    </>
-  )
+      </motion.div>
+    </div>
+  );
 }
 
-export default Login
+export default Login;
+

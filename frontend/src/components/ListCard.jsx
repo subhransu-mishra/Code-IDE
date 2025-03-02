@@ -3,6 +3,7 @@ import img from "../images/code.png"
 import deleteImg from "../images/delete.png"
 import { api_base_url } from '../helper';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ListCard = ({item}) => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const ListCard = ({item}) => {
         setIsDeleteModelShow(false)
         window.location.reload()
       }else{
-        alert(data.message)
+        toast.success(data.message)
         setIsDeleteModelShow(false)
       }
     })

@@ -1,0 +1,16 @@
+@keyframes slideDown {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  .shadow-red-glow {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+  
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  }
