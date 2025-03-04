@@ -20,3 +20,14 @@
 .drop-shadow-glow {
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
 }
+.navbar {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  @apply bg-white dark:bg-gray-900;
+}

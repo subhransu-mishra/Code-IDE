@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { FaPlus, FaFolderOpen, FaTimes } from "react-icons/fa";
 import "./../styles/Home.css";
 import { toast } from "react-toastify";
+import { BeatLoader } from "react-spinners";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [data, setData] = useState(null);
@@ -17,6 +19,8 @@ const Home = () => {
   const [isCreateModelShow, setIsCreateModelShow] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isGridLayout, setIsGridLayout] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [projectCreateLoading, setProjectCreateLoading] = useState(false);
 
   const filteredData = data
     ? data.filter((item) =>
@@ -29,7 +33,7 @@ const Home = () => {
       toast.error("Please Enter Project Title");
       return;
     }
-
+    setProjectCreateLoading(true);
     fetch(api_base_url + "/createProject", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,6 +49,7 @@ const Home = () => {
           setProjTitle("");
           navigate(`/`);
           toast.success("Project created successfully");
+          setProjectCreateLoading(false);
         } else {
           toast.error("Project creation failed");
         }
@@ -53,15 +58,22 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch projects
+    setLoading(true);
     fetch(api_base_url + "/getProjects", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: localStorage.getItem("userId") }),
     })
       .then((res) => res.json())
-      .then((data) =>
-        data.success ? setData(data.projects) : setError(data.message)
-      );
+      .then((data) => {
+        if (data.success) {
+          setData(data.projects);
+        } else {
+          setError(data.message);
+        }
+      })
+      .catch((err) => setError("Failed to fetch projects"))
+      .finally(() => setLoading(false));
 
     // Fetch user data
     fetch(api_base_url + "/getUserDetails", {
@@ -79,7 +91,7 @@ const Home = () => {
     <>
       <Navbar isGridLayout={isGridLayout} setIsGridLayout={setIsGridLayout} />
 
-      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] to-[#1a1a1a] pb-20 pt-[80px] md:mt-24">
+      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] to-[#1a1a1a] pb-20 pt-[80px] md:mt-20">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-4 sm:px-6 lg:px-[100px] my-6 md:my-[40px] gap-4">
           {/* Empty div for spacing */}
@@ -113,17 +125,22 @@ const Home = () => {
           </div>
         </div>
         {isCreateModelShow && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-[#202020] rounded-lg p-6 w-[90%] sm:w-[400px] shadow-lg">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="bg-[#1e1e1e] rounded-xl p-6 w-[90%] sm:w-[400px] shadow-2xl border border-gray-700"
+            >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg text-white font-semibold">
-                  Create New Project
+                <h2 className="text-xl text-white font-semibold">
+                  Give your project a title
                 </h2>
                 <button
                   onClick={() => setIsCreateModelShow(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-red-400 transition-colors"
                 >
-                  <FaTimes className="text-xl" />
+                  <FaTimes className="text-2xl" />
                 </button>
               </div>
 
@@ -132,22 +149,29 @@ const Home = () => {
                 placeholder="Enter project title"
                 value={projTitle}
                 onChange={(e) => setProjTitle(e.target.value)}
-                className="w-full p-2 mb-4 rounded bg-[#303030] text-white outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mb-4 rounded-lg bg-[#303030] text-white outline-none focus:ring-2 focus:ring-blue-500 border border-gray-600 focus:border-blue-400 transition-all"
               />
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={createProj}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-all"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-all shadow-md hover:shadow-blue-500/30"
               >
-                Create
-              </button>
-            </div>
+                {projectCreateLoading ? <BeatLoader color="#fff" size={8} /> : "Create Project"}
+              </motion.button>
+            </motion.div>
           </div>
         )}
 
         {/* Projects Grid/List */}
         <div className="px-4 sm:px-6 lg:px-[100px]">
-          {filteredData.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12 sm:py-20">
+              <BeatLoader color="#3B82F6" size={15} className="mx-auto" />
+              <p className="mt-4 text-gray-400">Loading your projects...</p>
+            </div>
+          ) : filteredData.length > 0 ? (
             <div
               className={
                 isGridLayout
