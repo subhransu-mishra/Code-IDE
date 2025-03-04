@@ -112,6 +112,38 @@ const Home = () => {
             </button>
           </div>
         </div>
+        {isCreateModelShow && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-[#202020] rounded-lg p-6 w-[90%] sm:w-[400px] shadow-lg">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg text-white font-semibold">
+                  Create New Project
+                </h2>
+                <button
+                  onClick={() => setIsCreateModelShow(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <FaTimes className="text-xl" />
+                </button>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Enter project title"
+                value={projTitle}
+                onChange={(e) => setProjTitle(e.target.value)}
+                className="w-full p-2 mb-4 rounded bg-[#303030] text-white outline-none focus:ring-2 focus:ring-blue-500"
+              />
+
+              <button
+                onClick={createProj}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-all"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Projects Grid/List */}
         <div className="px-4 sm:px-6 lg:px-[100px]">

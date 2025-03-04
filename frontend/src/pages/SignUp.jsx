@@ -21,7 +21,7 @@ const SignUp = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    fetch(api_base_url + "/signUp", {
+    fetch("http://localhost:3000/signUp", {
       mode: "cors",
       method: "POST",
       headers: {

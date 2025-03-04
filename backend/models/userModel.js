@@ -1,6 +1,11 @@
 let mongoose = require('mongoose');
-
-mongoose.connect('mongodb://127.0.0.1:27017/ide');
+require('dotenv').config();
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+  console.log('Connected to MongoDB');
+  console.log('MONGODB_URI:', process.env.MONGODB_URI);
+}).catch((err) => {
+  console.log('Error: ', err);
+});
 
 let userSchema = new mongoose.Schema({
   name: String,

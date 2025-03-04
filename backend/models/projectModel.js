@@ -1,7 +1,9 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 
-mongoose.connect('mongodb+srv://subhransumishra:subhransu700@cluster-1.kmwx7.mongodb.net/ide').then(() => {
+mongoose.connect(process.env.MONGODB_URI).then(() => {
   console.log("Connected to MongoDB");
+  console.log("MONGODB_URI:", process.env.MONGODB_URI);
 }).catch((err) => {
   console.log("Error: ", err);
 });
