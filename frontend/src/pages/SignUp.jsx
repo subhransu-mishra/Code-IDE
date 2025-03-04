@@ -21,7 +21,7 @@ const SignUp = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/signUp", {
+    fetch("http://localhost:https://code-ide-backend-6h2w.onrender.com/signUp", {
       mode: "cors",
       method: "POST",
       headers: {
