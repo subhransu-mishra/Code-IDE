@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { BeatLoader } from "react-spinners";
 import { FaCodeCompare } from "react-icons/fa6";
 
-
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
@@ -55,21 +54,21 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0d1117] to-[#161b22] p-6 text-white">
+    <div className="flex bg-gradient-to-br justify-center p-6 text-white from-[#0d1117] items-center min-h-screen to-[#161b22]">
       <ToastContainer position="top-right" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-[#161b22] backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-800"
+        className="bg-[#161b22] border border-gray-800 p-8 rounded-2xl shadow-2xl w-full backdrop-blur-lg max-w-md"
       >
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex justify-center items-center mb-6">
           <FaCodeCompare className="text-5xl text-blue-500 mr-3" />
-          <h1 className="text-3xl font-bold text-blue-400">
+          <h1 className="text-3xl text-blue-400 font-bold">
             NexGen <span className="text-white">Studio</span>
           </h1>
         </div>
-        
+
         <p className="text-center text-gray-400 mb-6">
           Create your developer workspace
         </p>
@@ -78,7 +77,7 @@ const SignUp = () => {
           {/** Username */}
           <div>
             <input
-              className="w-full px-4 py-3 rounded-lg bg-[#0d1117] border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none text-white placeholder-gray-500"
+              className="bg-[#0d1117] border border-gray-700 rounded-lg text-white w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 px-4 py-3"
               type="text"
               placeholder="Username"
               value={username}
@@ -89,7 +88,7 @@ const SignUp = () => {
           {/** Full Name */}
           <div>
             <input
-              className="w-full px-4 py-3 rounded-lg bg-[#0d1117] border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none text-white placeholder-gray-500"
+              className="bg-[#0d1117] border border-gray-700 rounded-lg text-white w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 px-4 py-3"
               type="text"
               placeholder="Full Name"
               value={name}
@@ -100,7 +99,7 @@ const SignUp = () => {
           {/** Email */}
           <div>
             <input
-              className="w-full px-4 py-3 rounded-lg bg-[#0d1117] border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none text-white placeholder-gray-500"
+              className="bg-[#0d1117] border border-gray-700 rounded-lg text-white w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 px-4 py-3"
               type="email"
               placeholder="Email Address"
               value={email}
@@ -111,7 +110,7 @@ const SignUp = () => {
           {/** Password */}
           <div className="relative">
             <input
-              className="w-full px-4 py-3 rounded-lg bg-[#0d1117] border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none text-white placeholder-gray-500 pr-12"
+              className="bg-[#0d1117] border border-gray-700 rounded-lg text-white w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 pr-12 px-4 py-3"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={pwd}
@@ -120,30 +119,36 @@ const SignUp = () => {
             />
             <button
               type="button"
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-400"
+              className="text-gray-400 -translate-y-1/2 absolute hover:text-blue-400 right-4 top-1/2 transform"
               onClick={togglePassword}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {/** Error Message */}
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <p className="text-center text-red-500 text-sm">{error}</p>}
           {/** Submit Button */}
           <div className="flex justify-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-full max-w-xs flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all duration-300 ease-in-out"
+              className="flex bg-blue-600 justify-center rounded-full text-white w-full duration-300 ease-in-out gap-2 hover:bg-blue-700 items-center max-w-xs px-6 py-3 transition-all"
             >
               {loader ? <BeatLoader color="#fff" size={8} /> : "Create Account"}
             </motion.button>
           </div>
           {/** Login Link */}
-          <p className="text-center text-sm text-gray-400 mt-4">
+          <p className="text-center text-gray-400 text-sm mt-4">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-400 hover:text-blue-300 font-semibold">
+            <Link
+              to="/login"
+              className="text-blue-400 font-semibold hover:text-blue-300"
+            >
               Log in
             </Link>
+          </p>
+          <p className="text-center text-white cursor-pointer hover:text-blue-600">
+            Login as guest
           </p>
         </form>
       </motion.div>
@@ -152,4 +157,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
