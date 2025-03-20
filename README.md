@@ -61,7 +61,7 @@ PORT=3000
 ```bash
 npm run dev
 ```
-The app should now be running at **http://localhost:5000** 🚀
+The app should now be running at **http://localhost:3000** 🚀
 
 ## 📸 Screenshots
 *(Include some screenshots or a GIF showcasing the editor in action.)*
