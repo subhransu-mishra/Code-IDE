@@ -7,6 +7,8 @@ import { api_base_url } from "../helper";
 import "./../styles/Navbar.css";
 import { BeatLoader } from "react-spinners";
 import { motion, AnimatePresence } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = ({ isGridLayout, setIsGridLayout }) => {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
   const [error, setError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isloading, setIsLoading] = useState(false);
- 
+
   useEffect(() => {
     // Fetch user data
     fetch(api_base_url + "/getUserDetails", {
@@ -29,11 +31,21 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
         else logout();
       });
   }, []);
- 
+
   const logout = () => {
     setIsLoading(true);
     localStorage.clear();
-    navigate("/login");
+    toast.success("Logged out successfully!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
     setIsLoading(false);
   };
 
@@ -43,30 +55,34 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
 
   // Animation variants for mobile menu
   const mobileMenuVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: -50,
       transition: {
-        duration: 0.3
-      }
+        duration: 0.3,
+      },
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       transition: {
         type: "spring",
         stiffness: 120,
         damping: 15,
-        duration: 0.5
-      }
-    }
+        duration: 0.5,
+      },
+    },
   };
 
   return (
     <div className="navbar fixed w-full top-0 z-50 backdrop-blur-lg bg-white dark:bg-black md:bg-white/80 dark:md:bg-black/80 shadow-sm transition-all duration-300 hover:bg-white/90 dark:hover:bg-black/90">
+      <ToastContainer />
       <div className="flex items-center justify-between px-4 md:px-8 lg:px-[100px] h-[70px] md:h-[80px]">
         {/* Logo */}
-        <Link to="/" className="logo transform transition duration-500 hover:scale-105">
+        <Link
+          to="/"
+          className="logo transform transition duration-500 hover:scale-105"
+        >
           <h1 className="text-black dark:text-white text-base md:text-lg font-bold">
             NexGen Studios
           </h1>
@@ -79,7 +95,11 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
             onClick={toggleMobileMenu}
             className="text-black dark:text-white p-2 focus:outline-none"
           >
-            {mobileMenuOpen ? <MdClose className="text-2xl" /> : <MdMenu className="text-2xl" />}
+            {mobileMenuOpen ? (
+              <MdClose className="text-2xl" />
+            ) : (
+              <MdMenu className="text-2xl" />
+            )}
           </motion.button>
         </div>
 
@@ -118,7 +138,7 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div 
+            <motion.div
               key="mobile-menu"
               initial="hidden"
               animate="visible"
@@ -135,12 +155,16 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
                     className="shadow-lg"
                   />
                   <div>
-                    <h3 className="font-medium text-black dark:text-white">{data?.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{data?.email}</p>
+                    <h3 className="font-medium text-black dark:text-white">
+                      {data?.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {data?.email}
+                    </p>
                   </div>
                 </div>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
@@ -154,7 +178,7 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
                   </Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
@@ -171,7 +195,7 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
                   </button>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
@@ -180,7 +204,11 @@ const Navbar = ({ isGridLayout, setIsGridLayout }) => {
                     onClick={logout}
                     className="w-full mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white transition-colors duration-300"
                   >
-                    {isloading ? <BeatLoader color="#fff" size={8} /> : "Logout"}
+                    {isloading ? (
+                      <BeatLoader color="#fff" size={8} />
+                    ) : (
+                      "Logout"
+                    )}
                   </button>
                 </motion.div>
               </div>

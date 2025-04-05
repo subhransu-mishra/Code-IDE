@@ -158,7 +158,11 @@ const Home = () => {
                 onClick={createProj}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-all shadow-md hover:shadow-blue-500/30"
               >
-                {projectCreateLoading ? <BeatLoader color="#fff" size={8} /> : "Create Project"}
+                {projectCreateLoading ? (
+                  <BeatLoader color="#fff" size={8} />
+                ) : (
+                  "Create Project"
+                )}
               </motion.button>
             </motion.div>
           </div>
